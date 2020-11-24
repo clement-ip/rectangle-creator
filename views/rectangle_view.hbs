@@ -1,0 +1,187 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Rectangles</title>
+  <link href="/assets/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Rectangles</h1>
+		<button class="btn btn-success float-right" data-toggle="modal" data-target="#myModalAdd">Add New Rectangle</button>
+    <table class="table table-striped" id="mytable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Width (px)</th>
+          <th>Height (px)</th>
+          <th>Area (px<sup>2</sup>)</th>
+          <th>Color</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each data}}
+        <tr>
+          <td>{{ id }}</td>
+          <td>{{ width }}</td>
+          <td>{{ height }}</td>
+          <td>{{ area }}</td>
+          <td>{{ color }}</td>
+          <td>
+            <a href="javascript:void(0);" class="btn btn-sm btn-primary edit" data-id="{{ id }}" data-width="{{ width }}" data-height="{{ height }}" data-color="{{ color }}">Edit</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ id }}">Delete</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-info show_rectangle" data-id="{{ id }}" data-width="{{ width }}" data-height="{{ height }}" data-color="{{ color }}">Display Rectangle</a>
+            {{!-- <button type="button" class="btn btn-sm btn-info show_rectangle" data-toggle="modal" data-target="#ShowRectangleModal">Display Rectangle</button> --}}
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+	<!-- Add New Rectangle-->
+	  <form action="/save" method="post">
+        <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Add New Rectangle</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div class="modal-body">
+              <div class="form-group">
+                <input type="number" name="width" min="0" class="form-control width" placeholder="Width (px)" required>
+              </div>
+
+              <div class="form-group">
+                <input type="number" name="height" min="0" class="form-control height" placeholder="Height (px)" required>
+              </div>
+
+              <div class="form-group">
+                <input type="text" name="color" class="form-control color" placeholder="Color" required>
+              </div>
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save</button>
+             </div>
+           </div>
+         </div>
+        </div>
+	 </form>
+
+	 <!-- Edit Rectangle Modal-->
+   <form action="/update" method="post">
+       <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Rectangle</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="number" name="width" min="0" class="form-control width" placeholder="Width (px)" required>
+              </div>
+
+              <div class="form-group">
+                <input type="number" name="height" min="0" class="form-control height" placeholder="Height (px)" required>
+              </div>
+
+              <div class="form-group">
+                <input type="text" name="color" class="form-control color" placeholder="Color" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="id" class="id">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </div>
+        </div>
+       </div>
+  </form>
+
+	 <!-- Delete Rectangle Model-->
+ 	  <form id="add-row-form" action="/delete" method="post">
+ 	     <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ 	        <div class="modal-dialog">
+ 	           <div class="modal-content">
+ 	               <div class="modal-header">
+									 	<h5 class="modal-title" id="myModalLabel">Delete Rectangle</h5>
+ 	                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+ 	               </div>
+ 	               <div class="modal-body">
+										<strong>Are You Sure To Delete This Rectangle?</strong>
+ 	               </div>
+ 	               <div class="modal-footer">
+									 		<input type="hidden" name="id" class="form-control id2" required>
+ 	                   	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+ 	                  	<button type="submit" class="btn btn-danger">Delete</button>
+ 	               </div>
+ 	      			</div>
+ 	        </div>
+ 	     </div>
+ 	 </form>
+
+  <!-- Display Rectangle Modal -->
+  <div id="ShowRectangleModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel">Display Rectangle</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div id='shape'></div>
+          {{!-- <p>Some text in the modal.</p> --}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="/assets/js/jquery-3.3.1.js"></script>
+<script src="/assets/js/bootstrap.js"></script>
+<script>
+    $(document).ready(function(){
+			//showing data to modal for edit record
+      $('#mytable').on('click','.edit',function(){
+        var id = $(this).data('id');
+        var width = $(this).data('width');
+        var height = $(this).data('height');
+        var color = $(this).data('color');
+        $('#EditModal').modal('show');
+        $('.width').val(width);
+        $('.height').val(height);
+        $('.color').val(color);
+        $('.id').val(id);
+
+      });
+			//showing modal for delete record
+			$('#mytable').on('click','.delete',function(){
+        var id = $(this).data('id');
+        $('#DeleteModal').modal('show');
+        $('.id2').val(id);
+      });
+
+      $('#mytable').on('click','.show_rectangle',function(){
+        $('#ShowRectangleModal').modal('show');
+        $('#shape').css({
+          'width': $(this).data('width'),
+          'height': $(this).data('height'),
+          'background': $(this).data('color')
+        });
+      });
+      
+    });
+</script>
+</body>
+</html>
