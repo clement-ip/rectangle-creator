@@ -4,7 +4,7 @@ const dbConnection = mysql.createConnection({
     host: 'localhost', 
     user: 'root',      
     password: 'password',  
-    database: 'rectangles'
+    database: 'rectangle_creator'
 }); 
 
 dbConnection.connect(function(err) {
