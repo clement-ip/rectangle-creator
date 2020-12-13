@@ -4,7 +4,7 @@ const dbConnection = mysql.createConnection({
     host: 'localhost', 
     user: 'root',      
     password: 'password',  
-    database: 'cmpt470'
+    database: 'rectangles'
 }); 
 
 dbConnection.connect(function(err) {
@@ -13,17 +13,4 @@ dbConnection.connect(function(err) {
   });
 module.exports = dbConnection;
 
-// dbConnection.connect((err)=>{
-//     if(!err){
-//         console.log("Connected!");
-//     }
-//     else{
-//         throw err;
-//     }
-// })
-
-// var port = 3000;
-// app.listen( port, function() {
-//     console.log( 'Express server listening on port %d in %s mode', port, app.settings.env );
-// });
 
